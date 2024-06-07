@@ -150,18 +150,18 @@ void hapusKendaraan(char* platNomor) {
   }
 }
 
-// Fungsi untuk mencari kendaraan
+// Fungsi untuk mencari kendaraan berdasarkan plat nomor
 ListKendaraan* cariKendaraan(char* platNomor) {
   ListKendaraan* curr = head;
 
   while (curr) {
     if (strcmp(curr->data.platNomor, platNomor) == 0) {
-      return curr;
+      return curr; // Jika plat nomor ditemukan, kembalikan pointer ke node
     }
     curr = curr->berikutnya;
   }
 
-  return NULL;
+  return NULL; // Jika kendaraan tidak ditemukan, kembalikan NULL
 }
 
 // Fungsi untuk parkir kendaraan
@@ -178,7 +178,6 @@ void parkirKendaraan(int indexAkun) {
   kendaraan.waktuMasuk = time(NULL);
 
   tambahKendaraan(kendaraan);
-//   riwayat.push(kendaraan);
 
   cout << "Kendaraan dengan plat nomor " << kendaraan.platNomor << " telah diparkir." << endl;
 }
@@ -320,6 +319,9 @@ void displayMenuUser() {
 // Fungsi untuk aplikasi bagian admin
 void menuAdmin(int indexAkun) {
     int choice;
+    char platNomor[15];
+    ListKendaraan* hasilPencarian = NULL; // Deklarasi di luar blok switch-case
+
     while (choice != 6)
     {
         displayMenuAdmin();
@@ -348,6 +350,19 @@ void menuAdmin(int indexAkun) {
             daftarKendaraanTerparkir();
             clearAndPause(true);
             continue;
+        case 5:
+            cout << "Masukkan plat nomor kendaraan yang dicari: ";
+            cin >> platNomor;
+            hasilPencarian = cariKendaraan(platNomor);
+            if (hasilPencarian) {
+                cout << "\nKendaraan ditemukan:\n";
+                cout << "Plat Nomor\tJenis Kendaraan\tWaktu Masuk\n";
+                tampilkanInfoKendaraan(hasilPencarian->data);
+            } else {
+                cout << "Kendaraan dengan plat nomor " << platNomor << " tidak ditemukan." << endl;
+            }
+            clearAndPause(true);
+            continue;
         case 6:
             cout << "Sampai jumpa kembali " << akun[indexAkun].username << "!" << endl;
             clearAndPause(true);
@@ -358,7 +373,6 @@ void menuAdmin(int indexAkun) {
             continue;
         }
     }
-    
 }
 
 // Fungsi untuk aplikasi bagian user
@@ -398,7 +412,6 @@ void menuUser(int indexAkun) {
             continue;
         }
     }
-    
 }
 
 int main() {
